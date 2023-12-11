@@ -19,7 +19,7 @@ Zp      <++> n = n
 (!!!) :: (n `Gt` Zero, m `Lt` n) => Nuple n x -> SNat m -> x
 (x :> _)         !!! Szero   = x
 (_ :> xs@(_:>_)) !!! Ssucc k = xs !!! k 
--- _                !!! _       = error "impossible"
+_                !!! _       = error "impossible, fix that later"
 
 toList :: Nuple n x -> [x]
 toList Zp = []

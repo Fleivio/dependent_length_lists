@@ -1,10 +1,9 @@
 name:                vecop
 version:             0.1.0.0
-github:              "githubuser/vecop"
+github:              "Fleivio/dependent_length_lists"
 license:             BSD-3-Clause
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2023 Author name here"
+author:              "Fleivio"
+copyright:           "2023 Fleivio"
 
 extra-source-files:
 - README.md
