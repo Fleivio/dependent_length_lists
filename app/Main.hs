@@ -13,7 +13,7 @@ test :: Nuple (S (S (S Z))) Int
 test = 1 :> 2 :> 3 :> Zp
 
 multAll :: Nuple (S (S Z)) Int -> Nuple (S (S Z)) Int
-multAll x = (_opM >>- _opN) >>-> x
+multAll x = x >>-> _opM >>- _opN
 
 main :: IO ()
 main = do
@@ -21,5 +21,5 @@ main = do
     print $ test !!! Ss Sz
     print $ test !!! Sz
 
-    print $ nFilter even (test <++> (4 :> Zp))
+    print $ nFilter even (test <++> 4 :> Zp)
     print $ multAll $ nTake (Ss (Ss Sz)) test

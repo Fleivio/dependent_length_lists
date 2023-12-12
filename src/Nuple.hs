@@ -24,6 +24,7 @@ instance Show x => Show (Nuple n x) where
 (<++>) :: Nuple n x -> Nuple m x -> Nuple (n `NatSum` m) x
 Zp      <++> n = n
 (x:>xs) <++> n = x :> (xs <++> n)
+infix 4 <++>
 
 (!!!) :: (Lt m n, Gt n Z) => Nuple n x -> SNat m -> x
 (x :> _)         !!! Sz   = x

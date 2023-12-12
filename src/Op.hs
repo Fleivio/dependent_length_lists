@@ -20,13 +20,13 @@ Op f -<< Op g = Op (f . g)
 app :: Op' n m x x -> Nuple n x -> Nuple m x
 app (Op f) = f
 
-(>>->) :: Op' n m x x -> Nuple n x -> Nuple m x
-o >>-> x = app o x
-infixr 1 >>->
+(<-<<) :: Op' n m x x -> Nuple n x -> Nuple m x
+o <-<< x = app o x
+infixr 1 <-<<
 
-(<-<<) :: Nuple n x -> Op' n m x x -> Nuple m x
-x <-<< o = app o x
-infixl 1 <-<<
+(>>->) :: Nuple n x -> Op' n m x x -> Nuple m x
+x >>-> o = app o x
+infixl 1 >>->
 
 idOp :: Op n a
 idOp = Op id
