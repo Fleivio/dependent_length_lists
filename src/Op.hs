@@ -28,6 +28,27 @@ infixr 1 >>->
 x <-<< o = app o x
 infixl 1 <-<<
 
-
 idOp :: Op n a
 idOp = Op id
+
+--------------------------------------------------
+instance Functor (Op' n m a) where
+    fmap f (Op g) = Op (fmap f . g)
+
+----------------------------------------------------
+
+instance Applicative (Nuple m) => Applicative (Op' n m a) where
+
+    pure a1 = Op $ \_ -> pure a1
+
+    Op f <*> Op g = Op $ \a -> f a <*> g a
+
+
+-- gen ::  (m `Gt` n) => 
+--         {-Original Operarion-} Op n x ->
+--         {-Selectors-}          CNuple (Gtec m) n ->
+--         {-Total Size-}         SNat m -> 
+--         {-Out Operation-}      Op m x
+-- gen = undefined
+
+

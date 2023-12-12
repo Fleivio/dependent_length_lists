@@ -47,6 +47,7 @@ library
       LambdaCase
       UndecidableInstances
       MultiParamTypeClasses
+      IncoherentInstances
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields
   build-depends:
       base >=4.7 && <5
@@ -73,6 +74,7 @@ executable vecop-exe
       LambdaCase
       UndecidableInstances
       MultiParamTypeClasses
+      IncoherentInstances
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
@@ -101,6 +103,7 @@ test-suite vecop-test
       LambdaCase
       UndecidableInstances
       MultiParamTypeClasses
+      IncoherentInstances
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5

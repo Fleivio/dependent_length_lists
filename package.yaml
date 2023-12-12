@@ -44,6 +44,7 @@ default-extensions:
 - LambdaCase
 - UndecidableInstances
 - MultiParamTypeClasses
+- IncoherentInstances
 
 library:
   source-dirs: src
