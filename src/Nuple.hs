@@ -1,7 +1,7 @@
 {-#LANGUAGE PolyKinds #-}
 module Nuple(
     Nuple(..), CNuple(..), ENuple(..),
-    (<++>), (!!!), (>==),
+    (<++>), (!!!),
     toList, fromList,
     nTake, nDrop, nHead, nTail, nInit, nLast,
     nFilter,
@@ -13,13 +13,13 @@ import Data.Kind(Type, Constraint)
 
 type Nuple :: Nat -> Type -> Type
 data Nuple n x where
-    Zp   :: Nuple Z x 
+    Zp   :: Nuple Z x
     (:>) :: x -> Nuple n x -> Nuple (S n) x
 infixr 9 :>
 deriving instance Eq   x => Eq (Nuple n x)
 
 instance Show x => Show (Nuple n x) where
-    show xs = "#" ++ (show $ toList xs)
+    show xs = "#" ++ show (toList xs)
 
 (<++>) :: Nuple n x -> Nuple m x -> Nuple (n `NatSum` m) x
 Zp      <++> n = n
@@ -30,7 +30,7 @@ infix 4 <++>
 (x :> _)         !!! Sz   = x
 (_ :> xs@(_:>_)) !!! Ss k = xs !!! k
 -- This cases are impossible, but GHC doesn't know that
-_                !!! _    = error "impossible case" 
+_                !!! _    = error "impossible case"
 
 nTake :: SNat n -> Nuple m x -> Nuple (n `NatMin` m) x
 nTake Sz     _         = Zp
@@ -40,7 +40,7 @@ nTake (Ss n) (x :> xs) = x :> nTake n xs
 nDrop :: SNat n -> Nuple m x -> Nuple (m `NatSub` n) x
 nDrop Sz     xs        = xs
 nDrop (Ss _) Zp        = Zp
-nDrop (Ss n) (_ :> xs) = nDrop n xs 
+nDrop (Ss n) (_ :> xs) = nDrop n xs
 
 nHead :: Nuple (S n) x -> x
 nHead (x :> _) = x
@@ -73,27 +73,19 @@ instance Applicative (Nuple Z) where
 
 instance Applicative (Nuple n) => Applicative (Nuple (S n)) where
     pure n = n :> pure n
-    
+
     f :> fs <*> x :> xs = f x :> (fs <*> xs)
 
 ------------------------------------------------
 
-(>==) :: Nuple n x -> (x -> Nuple m y) -> Nuple (n `NatMult` m) y
-Zp        >== _ = Zp
-(x :> xs) >== f = f x <++> (xs >== f)
-
-------------------------------------------------
-
-instance Foldable (Nuple Z) where
-    foldr _ z Zp = z
-
-instance Foldable (Nuple n) => Foldable (Nuple (S n)) where
+instance Foldable (Nuple n) where
+    foldr _ z Zp       = z
     foldr f z (x :> xs) = f x (foldr f z xs)
 
 ------------------------------------------------
 
 -- mantains the constraint that all elements of the nuple satisfy c
-data CNuple :: (Type -> Constraint) -> Nat -> Type where
+data CNuple :: (Nat -> Constraint) -> Nat -> Type where
     Cz  :: CNuple c Z
     (:-) :: c x => x -> CNuple c n -> CNuple c (S n)
 infixr 8 :-
@@ -101,6 +93,9 @@ infixr 8 :-
 instance Show (CNuple Show n) where
     show Cz = "Zp"
     show (x :- xs) = show x ++ " :> " ++ show xs
+
+test :: CNuple (Gt (S(S(S(S(S Z)))))) (S (S (S Z)))
+test = _1 :- _2 :- _3 :- Cz
 
 -------------------------------------------------------------------------
 
@@ -112,13 +107,13 @@ deriving instance Show x => Show (ENuple c x)
 
 nFilter :: (x -> Bool) -> Nuple n x -> ENuple (Gtec n) x
 nFilter _ Zp = ENuple Zp
-nFilter f (x :> xs) 
+nFilter f (x :> xs)
     | f x       = case nFilter f xs of
         ENuple k -> ENuple (x :> k)
     | otherwise = case nFilter f xs of
-        ENuple k -> ENuple k 
+        ENuple k -> ENuple k
 
 fromList :: [x] -> ENuple UnknownNat x
 fromList [] = ENuple Zp
 fromList (x:xs) = case fromList xs of
-    ENuple k -> ENuple (x :> k) 
+    ENuple k -> ENuple (x :> k)

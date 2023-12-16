@@ -1,7 +1,8 @@
 module Nat(Nat(..), SNat(..), Fin(..),
     NatSum, NatSub, NatMin, NatMult,
     Lt, Gt, Et,
-    Gtc, Ltc, Etc, Gtec, UnknownNat
+    Gtc, Ltc, Etc, Gtec, UnknownNat,
+    _0, _1, _2, _3, _4, _5, _6, _7, _8, _9
     ) where
 
 import Data.Kind(Constraint, Type)
@@ -10,6 +11,17 @@ data Nat =
       S Nat 
     | Z
     deriving (Eq, Show)
+
+_0 = Z
+_1 = S _0
+_2 = S _1
+_3 = S _2
+_4 = S _3
+_5 = S _4
+_6 = S _5
+_7 = S _6
+_8 = S _7
+_9 = S _8
 
 type SNat :: Nat -> Type
 data SNat a where
