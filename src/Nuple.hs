@@ -85,7 +85,7 @@ instance Foldable (Nuple n) where
 ------------------------------------------------
 
 -- mantains the constraint that all elements of the nuple satisfy c
-data CNuple :: (Nat -> Constraint) -> Nat -> Type where
+data CNuple :: (Type -> Constraint) -> Nat -> Type where
     Cz  :: CNuple c Z
     (:-) :: c x => x -> CNuple c n -> CNuple c (S n)
 infixr 8 :-
@@ -94,7 +94,7 @@ instance Show (CNuple Show n) where
     show Cz = "Zp"
     show (x :- xs) = show x ++ " :> " ++ show xs
 
-test :: CNuple (Gt (S(S(S(S(S Z)))))) (S (S (S Z)))
+test :: CNuple Show (S (S (S Z)))
 test = _1 :- _2 :- _3 :- Cz
 
 -------------------------------------------------------------------------
