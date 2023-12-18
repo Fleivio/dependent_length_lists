@@ -1,4 +1,3 @@
-{-#LANGUAGE PolyKinds #-}
 module Nuple(
     Nuple(..), CNuple(..), ENuple(..),
     (<++>), (!!!),
@@ -85,17 +84,18 @@ instance Foldable (Nuple n) where
 ------------------------------------------------
 
 -- mantains the constraint that all elements of the nuple satisfy c
-data CNuple :: (Type -> Constraint) -> Nat -> Type where
+type CNuple :: (Type -> Constraint) -> Nat -> Type
+data CNuple c n where
     Cz  :: CNuple c Z
-    (:-) :: c x => x -> CNuple c n -> CNuple c (S n)
+    (:-) :: c t => t -> CNuple c n -> CNuple c (S n)
 infixr 8 :-
 
 instance Show (CNuple Show n) where
     show Cz = "Zp"
     show (x :- xs) = show x ++ " :> " ++ show xs
 
-test :: CNuple Show (S (S (S Z)))
-test = _1 :- _2 :- _3 :- Cz
+_test :: CNuple Show (S (S (S Z)))
+_test = _1 :- _2 :- _3 :- Cz
 
 -------------------------------------------------------------------------
 

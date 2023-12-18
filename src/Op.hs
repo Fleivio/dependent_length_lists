@@ -1,8 +1,10 @@
-module Op(Op(..), app, idOp, foldOp, (>-), (-<), (>>-), (-<<), (>$)) where
+module Op(Op(..), app, idOp, foldOp, (>-), (-<), (>>-), (-<<), (>>)) where
 
 import Nat
 import Nuple
 import Data.Kind(Type)
+
+import Prelude hiding ((>>))
 
 type Op :: Nat -> Nat -> Type -> Type -> Type
 data Op n m a b where
@@ -12,9 +14,8 @@ data Op n m a b where
 Op f >- Op g = Op (g . f)
 infixr 1 >-
 
-(>$) :: (a -> b) -> a -> b
-(>$) = ($)
-infixr 1 >$
+(>>) :: Op n m x y -> Op m o y z -> Op n o x z
+(>>) = (>-)
 
 (-<) :: Op o n y z -> Op m o x y -> Op m n x z
 Op f -< Op g = Op (f . g)
@@ -30,7 +31,6 @@ infixr 1 -<<
 (>>-) :: Nuple n x -> Op n m x y -> Nuple m y
 (>>-) = flip (-<<)
 infixl 1 >>-
-
 
 idOp :: Op n n a a
 idOp = Op id
@@ -49,13 +49,3 @@ instance Applicative (Nuple m) => Applicative (Op n m a) where
     pure a1 = Op $ \_ -> pure a1
 
     Op f <*> Op g = Op $ \a -> f a <*> g a
-
-
--- extend ::  (m `Gt` n, n `Gt` k) => 
---         {-Original Operarion-} Op n x ->
---         {-Selectors-}          CNuple (Gtec m) k ->
---         {-Total Size-}         SNat m -> 
---         {-Out Operation-}      Op m x
--- extend = undefined
-
-

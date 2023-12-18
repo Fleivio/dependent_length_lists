@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-missing-signatures #-}
+{-# LANGUAGE PolyKinds #-}
 module Nat(Nat(..), SNat(..), Fin(..),
     NatSum, NatSub, NatMin, NatMult,
     Lt, Gt, Et,
@@ -12,21 +14,22 @@ data Nat =
     | Z
     deriving (Eq, Show)
 
-_0 = Z
-_1 = S _0
-_2 = S _1
-_3 = S _2
-_4 = S _3
-_5 = S _4
-_6 = S _5
-_7 = S _6
-_8 = S _7
-_9 = S _8
-
 type SNat :: Nat -> Type
 data SNat a where
     Sz :: SNat Z
     Ss :: SNat n -> SNat (S n)
+deriving instance Show (SNat n)
+
+_0 = Sz
+_1 = Ss _0
+_2 = Ss _1
+_3 = Ss _2
+_4 = Ss _3
+_5 = Ss _4
+_6 = Ss _5
+_7 = Ss _6
+_8 = Ss _7
+_9 = Ss _8
 
 data Fin :: Nat -> Type where
     Fz :: Fin (S n)
